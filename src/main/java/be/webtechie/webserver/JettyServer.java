@@ -1,6 +1,6 @@
 package be.webtechie.webserver;
 
-import be.webtechie.api.CameraService;
+import be.webtechie.api.CameraController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
@@ -34,7 +34,7 @@ public class JettyServer implements Runnable {
             ServletContextHandler apiHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
             apiHandler.setContextPath("/api");
             contexts.addHandler(apiHandler);
-            apiHandler.addServlet(CameraService.class, "/camera");
+            apiHandler.addServlet(CameraController.class, "/camera");
 
             LOGGER.info("Added handler for API");
         } catch (Exception e) {

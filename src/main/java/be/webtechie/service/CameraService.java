@@ -11,13 +11,13 @@ public class CameraService {
     private static final Logger LOGGER = LogManager.getLogger(CameraService.class.getName());
     private static CameraService instance;
 
-    private final int viewWidth = 1920;
-    private final int viewHeight = 1080;
+    private int viewWidth = 1920;
+    private int viewHeight = 1080;
 
-    private final double zoomOffsetX = 0D;
-    private final double zoomOffsetY = 0D;
-    private final double zoomWidth = 1D;
-    private final double zoomHeight = 1D;
+    private double zoomOffsetX = 0D;
+    private double zoomOffsetY = 0D;
+    private double zoomWidth = 1D;
+    private double zoomHeight = 1D;
 
     public static CameraService instance() {
         if (instance == null) {
@@ -27,15 +27,38 @@ public class CameraService {
     }
 
     public void applySettings() {
-        String cameraCommand = "libcamera-hello " +
-                " --viewfinder-width " + viewWidth + " --viewfinder-height " + viewHeight +
-                " --roi " + zoomOffsetX + "," + zoomOffsetY + "," + zoomWidth + "," + zoomHeight +
-                " -f -t 0 &";
-        CommandResult result = Executor.getCommandOutput("killall -9 libcamera-hello; " + cameraCommand);
+        String settings = " --viewfinder-width " + viewWidth + " --viewfinder-height " + viewHeight +
+                " --roi " + zoomOffsetX + "," + zoomOffsetY + "," + zoomWidth + "," + zoomHeight;
+        LOGGER.info("Applying settings: {}", settings);
+        CommandResult result = Executor.getCommandOutput("killall -9 libcamera-hello; libcamera-hello  " + settings + " -f -t 0 &");
         if (result.isSuccess()) {
             LOGGER.info("Camera settings were applied");
         } else {
             LOGGER.error("Error while applying settings: {}", result.getErrorMessage());
         }
+    }
+
+    public void setViewWidth(int viewWidth) {
+        this.viewWidth = viewWidth;
+    }
+
+    public void setViewHeight(int viewHeight) {
+        this.viewHeight = viewHeight;
+    }
+
+    public void setZoomOffsetX(double zoomOffsetX) {
+        this.zoomOffsetX = zoomOffsetX;
+    }
+
+    public void setZoomOffsetY(double zoomOffsetY) {
+        this.zoomOffsetY = zoomOffsetY;
+    }
+
+    public void setZoomWidth(double zoomWidth) {
+        this.zoomWidth = zoomWidth;
+    }
+
+    public void setZoomHeight(double zoomHeight) {
+        this.zoomHeight = zoomHeight;
     }
 }
