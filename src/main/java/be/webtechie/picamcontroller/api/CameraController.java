@@ -1,11 +1,12 @@
-package be.webtechie.api;
+package be.webtechie.picamcontroller.api;
 
-import be.webtechie.service.CameraService;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import be.webtechie.picamcontroller.service.CameraService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class CameraController extends HttpServlet {
 
@@ -14,6 +15,7 @@ public class CameraController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        LOGGER.info("Received GET request");
         try {
             if (req.getParameter("viewWidth") != null) {
                 cameraService.setViewWidth(Integer.parseInt(req.getParameter("viewWidth")));
@@ -35,8 +37,6 @@ public class CameraController extends HttpServlet {
                 cameraService.setZoomWidth(Double.parseDouble(req.getParameter("zoomWidth")));
             }
             cameraService.applySettings();
-
-
         } catch (Exception e) {
             LOGGER.error("Error while handling API request: {}", e.getMessage());
         }

@@ -16,13 +16,16 @@
         <!-- Dependencies -->
         <jackson.version>2.16.1</jackson.version>
         <jakarta.websocket.api.version>2.1.1</jakarta.websocket.api.version>
-        <jetty.version>12.0.5</jetty.version>
+        <jetty.version>9.4.56.v20240826</jetty.version>
         <jetty.websocket.version>11.0.19</jetty.websocket.version>
         <log4j.version>2.20.0</log4j.version>
 
         <!-- Test Dependencies -->
         <assertj.version>3.25.1</assertj.version>
         <junit.version>5.10.1</junit.version>
+
+        <!-- Plugins -->
+        <maven.shade.plugin.version>3.0.0</maven.shade.plugin.version>
     </properties>
 
     <dependencies>
@@ -41,20 +44,8 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-slf4j-impl</artifactId>
+            <artifactId>jetty-servlet</artifactId>
             <version>${jetty.version}</version>
-        </dependency>
-
-        <!-- Websockets -->
-        <dependency>
-            <groupId>org.eclipse.jetty.ee10.websocket</groupId>
-            <artifactId>jetty-ee10-websocket-jakarta-server</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.websocket</groupId>
-            <artifactId>jakarta.websocket-api</artifactId>
-            <version>${jakarta.websocket.api.version}</version>
         </dependency>
 
         <!-- JSON Parsing -->
@@ -95,4 +86,34 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>picam-controller</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven.shade.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>be.webtechie.picamcontroller.PiCamController</Main-Class>
+                                        <Build-Time>${maven.build.timestamp}</Build-Time>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
