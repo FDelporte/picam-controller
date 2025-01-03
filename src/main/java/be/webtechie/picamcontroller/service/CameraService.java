@@ -53,22 +53,28 @@ public class CameraService {
     }
 
     public void applySettings() {
-        // Stop current camera, result can be ignored
-        Executor.getCommandOutput("killall -9 libcamera-hello");
+        try {
+            // Stop current camera, result can be ignored
+            Executor.getCommandOutput("killall -9 libcamera-hello");
 
-        // Start camera with requested settings
-        String settings = " --viewfinder-width " + viewWidth + " --viewfinder-height " + viewHeight +
-                " --roi " + zoomOffsetX + "," + zoomOffsetY + "," + zoomWidth + "," + zoomHeight;
-        LOGGER.info("Applying settings: {}", settings);
-        Executor.getCommandOutput("libcamera-hello  " + settings + " -f -t 0");
+            Thread.sleep(2000);
 
-        LOGGER.info("Saving camera settings in registry");
-        registryHelper.put(RegistryKey.VIEW_WIDTH, String.valueOf(this.viewWidth));
-        registryHelper.put(RegistryKey.VIEW_HEIGHT, String.valueOf(this.viewHeight));
-        registryHelper.put(RegistryKey.ZOOM_OFFSET_X, String.valueOf(this.zoomOffsetX));
-        registryHelper.put(RegistryKey.ZOOM_OFFSET_Y, String.valueOf(this.zoomOffsetY));
-        registryHelper.put(RegistryKey.ZOOM_WIDTH, String.valueOf(this.zoomWidth));
-        registryHelper.put(RegistryKey.ZOOM_HEIGHT, String.valueOf(this.zoomHeight));
+            // Start camera with requested settings
+            String settings = " --viewfinder-width " + viewWidth + " --viewfinder-height " + viewHeight +
+                    " --roi " + zoomOffsetX + "," + zoomOffsetY + "," + zoomWidth + "," + zoomHeight;
+            LOGGER.info("Applying settings: {}", settings);
+            Executor.getCommandOutput("libcamera-hello  " + settings + " -f -t 0");
+
+            LOGGER.info("Saving camera settings in registry");
+            registryHelper.put(RegistryKey.VIEW_WIDTH, String.valueOf(this.viewWidth));
+            registryHelper.put(RegistryKey.VIEW_HEIGHT, String.valueOf(this.viewHeight));
+            registryHelper.put(RegistryKey.ZOOM_OFFSET_X, String.valueOf(this.zoomOffsetX));
+            registryHelper.put(RegistryKey.ZOOM_OFFSET_Y, String.valueOf(this.zoomOffsetY));
+            registryHelper.put(RegistryKey.ZOOM_WIDTH, String.valueOf(this.zoomWidth));
+            registryHelper.put(RegistryKey.ZOOM_HEIGHT, String.valueOf(this.zoomHeight));
+        } catch (Exception e) {
+            LOGGER.error("Error while applying settings: {}", e.getMessage());
+        }
     }
 
     public void setViewWidth(int viewWidth) {
