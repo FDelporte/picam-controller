@@ -74,6 +74,30 @@ public class CameraService {
         }
     }
 
+    public int getViewWidth() {
+        return viewWidth;
+    }
+
+    public int getViewHeight() {
+        return viewHeight;
+    }
+
+    public double getZoomOffsetX() {
+        return zoomOffsetX;
+    }
+
+    public double getZoomOffsetY() {
+        return zoomOffsetY;
+    }
+
+    public double getZoomWidth() {
+        return zoomWidth;
+    }
+
+    public double getZoomHeight() {
+        return zoomHeight;
+    }
+
     public void setViewWidth(int viewWidth) {
         this.viewWidth = viewWidth;
     }
