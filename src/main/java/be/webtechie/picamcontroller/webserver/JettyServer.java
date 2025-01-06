@@ -1,6 +1,7 @@
 package be.webtechie.picamcontroller.webserver;
 
-import be.webtechie.picamcontroller.api.CameraController;
+import be.webtechie.picamcontroller.camera.CameraController;
+import be.webtechie.picamcontroller.camera.CameraService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Server;
@@ -19,7 +20,7 @@ public class JettyServer {
 
     private final Server server;
 
-    public JettyServer(int port) {
+    public JettyServer(CameraService cameraService, int port) {
         server = new Server();
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
@@ -31,7 +32,7 @@ public class JettyServer {
         server.setHandler(context);
 
         // Register a servlet to handle requests at "/hello"
-        context.addServlet(new ServletHolder(new CameraController()), "/");
+        context.addServlet(new ServletHolder(new CameraController(cameraService)), "/");
 
         try {
             // Start the Jetty server

@@ -6,7 +6,7 @@ application [included in Raspberry Pi OS](https://www.raspberrypi.com/documentat
 
 ## REST API Controller
 
-The camera settings can be adapted through different communication channels.
+The camera settings can be adapted through an API.
 
 ```text
 http//localhost:8080/api/camera?viewWidth=1920&viewHeight=1080&zoomOffsetX=0.0&zoomOffsetY=0.0&zoomWidth=1.0&zoomHeight=1.0

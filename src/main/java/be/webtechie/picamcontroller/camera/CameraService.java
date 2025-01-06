@@ -1,16 +1,13 @@
-package be.webtechie.picamcontroller.service;
+package be.webtechie.picamcontroller.camera;
 
-import be.webtechie.picamcontroller.exec.Executor;
 import be.webtechie.picamcontroller.registry.RegistryHelper;
 import be.webtechie.picamcontroller.registry.RegistryKey;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class CameraService {
-
     private static final Logger LOGGER = LogManager.getLogger(CameraService.class.getName());
     private static final RegistryHelper registryHelper = new RegistryHelper();
-    private static CameraService instance;
     private int viewWidth = 1920;
     private int viewHeight = 1080;
     private double zoomOffsetX = 0D;
@@ -18,11 +15,9 @@ public class CameraService {
     private double zoomWidth = 1D;
     private double zoomHeight = 1D;
 
-    public static CameraService instance() {
-        if (instance == null) {
-            instance = new CameraService();
-        }
-        return instance;
+    public CameraService() {
+        loadSavedSettings();
+        applySettings();
     }
 
     public void loadSavedSettings() {
@@ -55,16 +50,18 @@ public class CameraService {
     public void applySettings() {
         try {
             // Stop current camera, result can be ignored
-            Executor.getCommandOutput("killall -9 libcamera-hello");
+            Executor.execute("killall -9 libcamera-hello");
 
+            // Make sure camera is stopped
             Thread.sleep(2000);
 
             // Start camera with requested settings
             String settings = " --viewfinder-width " + viewWidth + " --viewfinder-height " + viewHeight +
                     " --roi " + zoomOffsetX + "," + zoomOffsetY + "," + zoomWidth + "," + zoomHeight;
             LOGGER.info("Applying settings: {}", settings);
-            Executor.getCommandOutput("libcamera-hello  " + settings + " -f -t 0");
+            Executor.execute("libcamera-hello  " + settings + " -f -t 0");
 
+            // Save settings in registry to apply after restart
             LOGGER.info("Saving camera settings in registry");
             registryHelper.put(RegistryKey.VIEW_WIDTH, String.valueOf(this.viewWidth));
             registryHelper.put(RegistryKey.VIEW_HEIGHT, String.valueOf(this.viewHeight));

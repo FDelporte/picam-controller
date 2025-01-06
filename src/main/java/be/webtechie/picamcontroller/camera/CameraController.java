@@ -1,6 +1,5 @@
-package be.webtechie.picamcontroller.api;
+package be.webtechie.picamcontroller.camera;
 
-import be.webtechie.picamcontroller.service.CameraService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,9 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CameraController extends HttpServlet {
-
     private static final Logger LOGGER = LogManager.getLogger(CameraController.class.getName());
-    private final CameraService cameraService = CameraService.instance();
+    private final CameraService cameraService;
+
+    public CameraController(CameraService cameraService) {
+        this.cameraService = cameraService;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
@@ -23,7 +25,6 @@ public class CameraController extends HttpServlet {
             if (req.getParameter("viewHeight") != null) {
                 cameraService.setViewHeight(Integer.parseInt(req.getParameter("viewHeight")));
             }
-
             if (req.getParameter("zoomOffsetX") != null) {
                 cameraService.setZoomOffsetX(Double.parseDouble(req.getParameter("zoomOffsetX")));
             }

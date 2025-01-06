@@ -1,4 +1,4 @@
-package be.webtechie.picamcontroller.exec;
+package be.webtechie.picamcontroller.camera;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Executor {
     private static final Logger LOGGER = LogManager.getLogger(Executor.class.getName());
 
-    public static void getCommandOutput(String command) {
+    public static void execute(String command) {
         try {
             // Split the command into parts (use the shell if necessary)
             String[] commandParts = {"/bin/sh", "-c", command};
@@ -24,9 +24,7 @@ public class Executor {
             processBuilder.start();
 
             // No waitFor(), the process runs independently
-            System.out.println("Command started: " + command);
-
-
+            LOGGER.info("Command started: {}", command);
         } catch (IOException ex) {
             LOGGER.error("Could not execute '{}': {}", command, ex.getMessage());
         }
