@@ -59,10 +59,11 @@ public class CameraService {
             String settings = " --viewfinder-width " + viewWidth + " --viewfinder-height " + viewHeight +
                     " --roi " + zoomOffsetX + "," + zoomOffsetY + "," + zoomWidth + "," + zoomHeight;
             LOGGER.info("Applying settings: {}", settings);
-            Executor.execute("libcamera-hello  " + settings + " -f -t 0");
+            // White balance values: https://www.raspberrypi.com/documentation/computers/camera_software.html#awb
+            Executor.execute("libcamera-hello  " + settings + " --awb indoor -f -t 0");
 
             // Save settings in registry to apply after restart
-            LOGGER.info("Saving camera settings in registry");
+            LOGGER.info("Saving cacameraService.applySettings();mera settings in registry");
             registryHelper.put(RegistryKey.VIEW_WIDTH, String.valueOf(this.viewWidth));
             registryHelper.put(RegistryKey.VIEW_HEIGHT, String.valueOf(this.viewHeight));
             registryHelper.put(RegistryKey.ZOOM_OFFSET_X, String.valueOf(this.zoomOffsetX));
@@ -78,44 +79,44 @@ public class CameraService {
         return viewWidth;
     }
 
-    public int getViewHeight() {
-        return viewHeight;
-    }
-
-    public double getZoomOffsetX() {
-        return zoomOffsetX;
-    }
-
-    public double getZoomOffsetY() {
-        return zoomOffsetY;
-    }
-
-    public double getZoomWidth() {
-        return zoomWidth;
-    }
-
-    public double getZoomHeight() {
-        return zoomHeight;
-    }
-
     public void setViewWidth(int viewWidth) {
         this.viewWidth = viewWidth;
+    }
+
+    public int getViewHeight() {
+        return viewHeight;
     }
 
     public void setViewHeight(int viewHeight) {
         this.viewHeight = viewHeight;
     }
 
+    public double getZoomOffsetX() {
+        return zoomOffsetX;
+    }
+
     public void setZoomOffsetX(double zoomOffsetX) {
         this.zoomOffsetX = zoomOffsetX;
+    }
+
+    public double getZoomOffsetY() {
+        return zoomOffsetY;
     }
 
     public void setZoomOffsetY(double zoomOffsetY) {
         this.zoomOffsetY = zoomOffsetY;
     }
 
+    public double getZoomWidth() {
+        return zoomWidth;
+    }
+
     public void setZoomWidth(double zoomWidth) {
         this.zoomWidth = zoomWidth;
+    }
+
+    public double getZoomHeight() {
+        return zoomHeight;
     }
 
     public void setZoomHeight(double zoomHeight) {
